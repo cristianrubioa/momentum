@@ -1,37 +1,46 @@
 # Momentum
 
-A [HACS](https://hacs.xyz) integration for Home Assistant that preserves a meaningful moment in time — a birth, a wedding, a milestone — by capturing the exact sky above you that night and displaying it on your dashboard alongside a living counter of how much time has passed.
+[![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
+[![HA Version](https://img.shields.io/badge/Home%20Assistant-2024.1+-blue.svg)](https://www.home-assistant.io)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Features
+A [HACS](https://hacs.xyz) integration for Home Assistant that preserves a meaningful moment — a birth, a wedding, a milestone — by capturing the exact sky above you that night and displaying it on your dashboard with a living elapsed-time counter.
 
-- Sky map image fetched once from a [Celeste](https://celeste.app)-compatible API and stored locally (survives server outages)
-- Elapsed time sensor updated daily: `"4 years 3 months 2 days"`
-- Custom Lovelace card showing the sky map and elapsed time
-- YAML and visual card editor support
+<img src="assets/preview.png" width="400" alt="Preview" />
+
+## How it works
+
+1. During setup you provide the date, time, and coordinates of your moment
+2. Momentum fetches the sky map once from the [Celeste](https://api.celeste.crubio.fyi) API and stores it locally
+3. A sensor updates daily with the elapsed time: `6 years 3 months 10 days`
+4. A custom Lovelace card displays the sky map and the counter
 
 ## Installation
 
-1. Install via HACS (add this repo as a custom repository)
-2. Restart Home Assistant
+1. Add this repo as a custom repository in HACS
+2. Install **Momentum** and restart Home Assistant
 3. Go to **Settings → Devices & Services → Add Integration → Momentum**
-4. Follow the setup steps
 
-## Configuration
+## Setup
 
-The config flow collects:
+The config flow asks for:
 
-1. **Name/message** — shown on the card (e.g. "El día que nació Lucía")
-2. **Date and time (UTC)** — the moment to preserve
-3. **Image source** — either generate via Celeste API (requires lat/lon) or provide a manual image URL
+| Field | Example |
+|---|---|
+| Name | El día que nació Lucía |
+| Date | 2020-03-15 |
+| Time (UTC) | 22:30 |
+| Latitude | -34.6037 |
+| Longitude | -58.3816 |
 
-## Lovelace Card
+## Lovelace card
 
 ```yaml
 type: custom:momentum-card
-entity: sensor.momentum_<slug>
+entity: sensor.<your_moment>_elapsed_time
 ```
 
 ## Requirements
 
-- Home Assistant 2023.x or later
-- HACS 1.x or later
+- Home Assistant 2024.1 or later
+- HACS 2.x or later
