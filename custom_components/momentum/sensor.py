@@ -68,7 +68,7 @@ class MomentoSensor(SensorEntity):
         data = self._entry.data
         if data.get("image_source") == "manual":
             return data.get("image_url", "")
-        return f"/local/momentum/{self._entry.entry_id}.svg"
+        return data.get("image_local_url", "")
 
     async def async_update(self) -> None:
         self._compute()

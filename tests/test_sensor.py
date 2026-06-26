@@ -16,6 +16,7 @@ def _make_entry(date: str, name: str = "Test", image_source: str = "api") -> Mag
         "date": date,
         "image_source": image_source,
         "image_url": "",
+        "image_local_url": "/local/momentum/flow-uuid.svg",
     }
     return entry
 

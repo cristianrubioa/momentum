@@ -100,7 +100,7 @@ class MomentumConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if image_data.get("image_source") == "api":
             try:
-                await fetch_and_save_image(
+                local_url = await fetch_and_save_image(
                     hass=self.hass,
                     entry_id=self.flow_id,
                     server_url=image_data["server_url"],
@@ -109,6 +109,7 @@ class MomentumConfigFlow(ConfigFlow, domain=DOMAIN):
                     date=self._step1_data["date"],
                     time=self._step1_data["time"],
                 )
+                data["image_local_url"] = local_url
             except ImageFetchError as err:
                 return self.async_show_form(
                     step_id="image_source",
