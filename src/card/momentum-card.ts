@@ -94,6 +94,7 @@ export class MomentumCard extends LitElement {
 
   updated(_changedProps: Map<string, unknown>) {
     const url = this._imageUrl;
+    console.log("[momentum-card] updated — imageUrl:", url, "svgUrl:", this._svgUrl);
     if (url && url !== this._svgUrl) {
       this._svgUrl = url;
       this._fetchSvg(url);
@@ -101,10 +102,15 @@ export class MomentumCard extends LitElement {
   }
 
   private async _fetchSvg(url: string): Promise<void> {
+    console.log("[momentum-card] fetching:", url);
     try {
       const resp = await fetch(url);
-      this._svgContent = resp.ok ? await resp.text() : "";
-    } catch {
+      console.log("[momentum-card] response:", resp.status, resp.ok);
+      const text = resp.ok ? await resp.text() : "";
+      console.log("[momentum-card] content length:", text.length);
+      this._svgContent = text;
+    } catch (e) {
+      console.error("[momentum-card] fetch error:", e);
       this._svgContent = "";
     }
   }
