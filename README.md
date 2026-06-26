@@ -2,7 +2,7 @@
 
 [![HACS Custom](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 [![HA Version](https://img.shields.io/badge/Home%20Assistant-2024.1+-blue.svg)](https://www.home-assistant.io)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/github/license/cristianrubioa/momentum)](LICENSE)
 
 A [HACS](https://hacs.xyz) integration for Home Assistant that preserves a meaningful moment — a birth, a wedding, a milestone — by capturing the exact sky above you that night and displaying it on your dashboard with a living elapsed-time counter.
 

@@ -2,6 +2,5 @@
   "name": "Momentum",
   "documentation": "https://github.com/cristianrubioa/momentum",
   "homeassistant": "2024.1.0",
-  "iot_class": "calculated",
-  "icon": "https://raw.githubusercontent.com/cristianrubioa/momentum/main/icon.png"
+  "iot_class": "calculated"
 }
