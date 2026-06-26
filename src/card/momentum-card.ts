@@ -1,5 +1,6 @@
 import { LitElement, html, css, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
+import { unsafeHTML } from "lit/directives/unsafe-html.js";
 
 interface MomentumCardConfig {
   entity: string;
@@ -19,6 +20,8 @@ interface Hass {
 export class MomentumCard extends LitElement {
   @property({ attribute: false }) hass?: Hass;
   @state() private _config?: MomentumCardConfig;
+  @state() private _svgContent = "";
+  @state() private _svgUrl = "";
 
   static styles = css`
     :host {
@@ -35,6 +38,12 @@ export class MomentumCard extends LitElement {
       display: block;
       aspect-ratio: 1;
       background: #0a0a1a;
+      overflow: hidden;
+    }
+    .sky-map svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
     .placeholder {
       width: 100%;
@@ -83,6 +92,23 @@ export class MomentumCard extends LitElement {
     return { entity: "sensor.momentum_example" };
   }
 
+  updated(changedProps: Map<string, unknown>) {
+    const url = this._imageUrl;
+    if (url && url !== this._svgUrl) {
+      this._svgUrl = url;
+      this._fetchSvg(url);
+    }
+  }
+
+  private async _fetchSvg(url: string): Promise<void> {
+    try {
+      const resp = await fetch(url);
+      this._svgContent = resp.ok ? await resp.text() : "";
+    } catch {
+      this._svgContent = "";
+    }
+  }
+
   private get _entity(): HassEntity | undefined {
     if (!this.hass || !this._config) return undefined;
     return this.hass.states[this._config.entity];
@@ -111,13 +137,9 @@ export class MomentumCard extends LitElement {
     return html`
       <ha-card>
         <div class="card-content">
-          ${!this._imageUrl
+          ${!this._svgContent
             ? html`<div class="placeholder">Sky map unavailable</div>`
-            : html`<object
-                class="sky-map"
-                data=${this._imageUrl}
-                type="image/svg+xml"
-              ></object>`}
+            : html`<div class="sky-map">${unsafeHTML(this._svgContent)}</div>`}
           <div class="info">
             <div class="memento-name">${this._name}</div>
             <div class="elapsed ${this._elapsed === null ? "unavailable" : ""}">
