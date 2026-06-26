@@ -1,0 +1,36 @@
+# Release pipeline — disabled during dev, uncomment when ready to ship
+#
+# name: Release
+#
+# on:
+#   push:
+#     tags:
+#       - "v*"
+#
+# jobs:
+#   release:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: write
+#     steps:
+#       - uses: actions/checkout@v4
+#
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: "20"
+#           cache: "npm"
+#
+#       - run: npm ci
+#       - run: npm run build
+#
+#       - name: Create release zip
+#         run: |
+#           zip -r momentum.zip \
+#             custom_components/momentum/ \
+#             hacs.json \
+#             README.md
+#
+#       - uses: softprops/action-gh-release@v2
+#         with:
+#           files: |
+#             momentum.zip
