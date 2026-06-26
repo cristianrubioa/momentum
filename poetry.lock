@@ -801,6 +801,18 @@ files = [
 ]
 
 [[package]]
+name = "voluptuous"
+version = "0.13.1"
+description = ""
+optional = false
+python-versions = "*"
+groups = ["dev"]
+files = [
+    {file = "voluptuous-0.13.1-py3-none-any.whl", hash = "sha256:4b838b185f5951f2d6e8752b68fcf18bd7a9c26ded8f143f92d6d28f3921a3e6"},
+    {file = "voluptuous-0.13.1.tar.gz", hash = "sha256:e8d31c20601d6773cb14d4c0f42aee29c6821bbd1018039aac7ac5605b489723"},
+]
+
+[[package]]
 name = "yarl"
 version = "1.24.2"
 description = "Yet another URL library"
@@ -922,4 +934,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "4f7190986dfbab2fc3039296ba14937c18415cf8f34b4a60909214a9c024e9e9"
+content-hash = "dd6549a9eac4b7dddff96cee25934938d66e74f6f0f021b75cf1b349718fdaca"
