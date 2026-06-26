@@ -19,7 +19,6 @@ interface Hass {
 export class MomentumCard extends LitElement {
   @property({ attribute: false }) hass?: Hass;
   @state() private _config?: MomentumCardConfig;
-  @state() private _imageError = false;
 
   static styles = css`
     :host {
@@ -35,7 +34,6 @@ export class MomentumCard extends LitElement {
       width: 100%;
       display: block;
       aspect-ratio: 1;
-      object-fit: cover;
       background: #0a0a1a;
     }
     .placeholder {
@@ -71,7 +69,6 @@ export class MomentumCard extends LitElement {
       throw new Error("momentum-card: 'entity' is required");
     }
     this._config = config;
-    this._imageError = false;
   }
 
   getCardSize(): number {
@@ -108,24 +105,19 @@ export class MomentumCard extends LitElement {
     return entity.state;
   }
 
-  private _handleImageError(): void {
-    this._imageError = true;
-  }
-
   render() {
     if (!this._config) return nothing;
 
     return html`
       <ha-card>
         <div class="card-content">
-          ${this._imageError || !this._imageUrl
+          ${!this._imageUrl
             ? html`<div class="placeholder">Sky map unavailable</div>`
-            : html`<img
+            : html`<object
                 class="sky-map"
-                src=${this._imageUrl}
-                alt="Sky map"
-                @error=${this._handleImageError}
-              />`}
+                data=${this._imageUrl}
+                type="image/svg+xml"
+              ></object>`}
           <div class="info">
             <div class="memento-name">${this._name}</div>
             <div class="elapsed ${this._elapsed === null ? "unavailable" : ""}">
