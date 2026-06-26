@@ -1,4 +1,5 @@
 """Tests for image fetch and storage."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -7,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import aiohttp
 import pytest
 
-from custom_components.momentum.image import fetch_and_save_image, delete_image, ImageFetchError
+from custom_components.momentum.image import ImageFetchError, delete_image, fetch_and_save_image
 
 
 def _make_hass(tmp_path: Path) -> MagicMock:
@@ -65,8 +66,13 @@ async def test_non_200_raises_error(tmp_path: Path):
     with patch("custom_components.momentum.image.aiohttp.ClientSession", return_value=mock_session):
         with pytest.raises(ImageFetchError, match="api_error"):
             await fetch_and_save_image(
-                hass=hass, entry_id="abc", server_url="https://api.celeste.app",
-                lat="0", lon="0", date="2020-01-01", time="00:00",
+                hass=hass,
+                entry_id="abc",
+                server_url="https://api.celeste.app",
+                lat="0",
+                lon="0",
+                date="2020-01-01",
+                time="00:00",
             )
 
 
@@ -86,8 +92,13 @@ async def test_timeout_raises_error(tmp_path: Path):
     with patch("custom_components.momentum.image.aiohttp.ClientSession", return_value=mock_session):
         with pytest.raises(ImageFetchError, match="timeout"):
             await fetch_and_save_image(
-                hass=hass, entry_id="abc", server_url="https://api.celeste.app",
-                lat="0", lon="0", date="2020-01-01", time="00:00",
+                hass=hass,
+                entry_id="abc",
+                server_url="https://api.celeste.app",
+                lat="0",
+                lon="0",
+                date="2020-01-01",
+                time="00:00",
             )
 
 

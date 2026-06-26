@@ -1,14 +1,11 @@
 """Tests for the Momentum config flow."""
+
 from __future__ import annotations
-
-from unittest.mock import AsyncMock, patch
-
-import pytest
 
 from custom_components.momentum.config_flow import _validate_step1, _validate_step2
 
-
 # --- Step 1 validation ---
+
 
 def test_step1_valid():
     errors = _validate_step1({"name": "Boda", "date": "2020-06-15", "time": "18:30"})
@@ -32,47 +29,58 @@ def test_step1_invalid_time():
 
 # --- Step 2 validation ---
 
+
 def test_step2_api_valid():
-    errors = _validate_step2({
-        "image_source": "api",
-        "server_url": "https://api.celeste.app",
-        "lat": "40.7128",
-        "lon": "-74.0060",
-    })
+    errors = _validate_step2(
+        {
+            "image_source": "api",
+            "server_url": "https://api.celeste.app",
+            "lat": "40.7128",
+            "lon": "-74.0060",
+        }
+    )
     assert errors == {}
 
 
 def test_step2_api_missing_lat():
-    errors = _validate_step2({
-        "image_source": "api",
-        "server_url": "https://api.celeste.app",
-        "lat": "",
-        "lon": "-74.0060",
-    })
+    errors = _validate_step2(
+        {
+            "image_source": "api",
+            "server_url": "https://api.celeste.app",
+            "lat": "",
+            "lon": "-74.0060",
+        }
+    )
     assert "lat" in errors
 
 
 def test_step2_api_missing_lon():
-    errors = _validate_step2({
-        "image_source": "api",
-        "server_url": "https://api.celeste.app",
-        "lat": "40.7128",
-        "lon": "",
-    })
+    errors = _validate_step2(
+        {
+            "image_source": "api",
+            "server_url": "https://api.celeste.app",
+            "lat": "40.7128",
+            "lon": "",
+        }
+    )
     assert "lon" in errors
 
 
 def test_step2_manual_valid():
-    errors = _validate_step2({
-        "image_source": "manual",
-        "image_url": "https://example.com/sky.svg",
-    })
+    errors = _validate_step2(
+        {
+            "image_source": "manual",
+            "image_url": "https://example.com/sky.svg",
+        }
+    )
     assert errors == {}
 
 
 def test_step2_manual_missing_url():
-    errors = _validate_step2({
-        "image_source": "manual",
-        "image_url": "",
-    })
+    errors = _validate_step2(
+        {
+            "image_source": "manual",
+            "image_url": "",
+        }
+    )
     assert "image_url" in errors

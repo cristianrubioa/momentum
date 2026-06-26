@@ -1,10 +1,9 @@
 """Tests for the MomentoSensor elapsed time calculation."""
+
 from __future__ import annotations
 
 import datetime
 from unittest.mock import MagicMock
-
-import pytest
 
 from custom_components.momentum.sensor import MomentoSensor
 
@@ -28,6 +27,7 @@ def _sensor_with_today(date: str, today: datetime.date) -> MomentoSensor:
 
 
 # --- State string ---
+
 
 def test_more_than_one_year():
     today = datetime.date(2025, 9, 17)
@@ -74,6 +74,7 @@ def test_singular_day():
 
 
 # --- Attributes ---
+
 
 def test_attributes_populated():
     today = datetime.date(2025, 9, 17)

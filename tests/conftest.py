@@ -1,4 +1,5 @@
 """Stub out homeassistant imports so unit tests run without a full HA install."""
+
 from __future__ import annotations
 
 import sys
@@ -15,11 +16,14 @@ def _make_module(name: str, **attrs) -> types.ModuleType:
 class HomeAssistant:
     pass
 
+
 ha_core = _make_module("homeassistant.core", HomeAssistant=HomeAssistant)
+
 
 # --- homeassistant.config_entries ---
 class ConfigEntry:
     pass
+
 
 class ConfigFlow:
     def __init_subclass__(cls, domain: str = "", **kw):
@@ -31,6 +35,7 @@ class ConfigFlow:
     async def async_create_entry(self, *, title, data):
         pass
 
+
 ConfigFlowResult = dict
 
 ha_config_entries = _make_module(
@@ -39,6 +44,7 @@ ha_config_entries = _make_module(
     ConfigFlow=ConfigFlow,
     ConfigFlowResult=ConfigFlowResult,
 )
+
 
 # --- homeassistant.components.sensor ---
 class SensorEntity:
@@ -51,22 +57,28 @@ class SensorEntity:
     def async_write_ha_state(self):
         pass
 
+
 ha_sensor = _make_module("homeassistant.components.sensor", SensorEntity=SensorEntity)
 ha_components = _make_module("homeassistant.components")
+
 
 # --- homeassistant.helpers ---
 class AddEntitiesCallback:
     pass
+
 
 ha_helpers_entity_platform = _make_module(
     "homeassistant.helpers.entity_platform",
     AddEntitiesCallback=AddEntitiesCallback,
 )
 
+
 def async_track_time_change(hass, action, *, hour, minute, second):
     def unsub():
         pass
+
     return unsub
+
 
 ha_helpers_event = _make_module(
     "homeassistant.helpers.event",

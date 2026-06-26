@@ -5,10 +5,9 @@ from typing import Any
 
 import voluptuous as vol
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
-from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
-from .image import fetch_and_save_image, ImageFetchError
+from .image import ImageFetchError, fetch_and_save_image
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _TIME_RE = re.compile(r"^\d{2}:\d{2}$")
@@ -65,9 +64,7 @@ class MomentumConfigFlow(ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         self._step1_data: dict[str, Any] = {}
 
-    async def async_step_user(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         errors: dict[str, str] = {}
 
         if user_input is not None:
