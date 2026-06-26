@@ -6,7 +6,7 @@
 
 A [HACS](https://hacs.xyz) integration for Home Assistant that preserves a meaningful moment — a birth, a wedding, a milestone — by capturing the exact sky above you that night and displaying it on your dashboard with a living elapsed-time counter.
 
-<img src="assets/preview.png" width="400" alt="Preview" />
+<img src="https://raw.githubusercontent.com/cristianrubioa/momentum/main/assets/preview.png" width="400" alt="Preview" />
 
 ## How it works
 
