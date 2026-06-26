@@ -56,20 +56,22 @@ export class MomentumCard extends LitElement {
       font-size: 0.9rem;
     }
     .info {
-      padding: 12px 16px;
+      padding: 14px 16px;
+      background: #0a0a1a;
+      text-align: center;
     }
     .memento-name {
       font-size: 0.85rem;
-      color: var(--secondary-text-color);
+      color: rgba(255, 255, 255, 0.5);
       margin-bottom: 4px;
     }
     .elapsed {
       font-size: 1.1rem;
       font-weight: 500;
-      color: var(--primary-text-color);
+      color: rgba(255, 255, 255, 0.9);
     }
     .elapsed.unavailable {
-      color: var(--disabled-text-color);
+      color: rgba(255, 255, 255, 0.25);
     }
   `;
 

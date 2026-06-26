@@ -65,10 +65,7 @@ class MomentoSensor(SensorEntity):
         }
 
     def _image_url(self) -> str:
-        data = self._entry.data
-        if data.get("image_source") == "manual":
-            return data.get("image_url", "")
-        return data.get("image_local_url", "")
+        return self._entry.data.get("image_local_url", "")
 
     async def async_update(self) -> None:
         self._compute()

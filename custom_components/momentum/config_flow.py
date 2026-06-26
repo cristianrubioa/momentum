@@ -20,13 +20,11 @@ STEP1_SCHEMA = vol.Schema(
     }
 )
 
-STEP2_API_SCHEMA = vol.Schema(
+STEP2_SCHEMA = vol.Schema(
     {
-        vol.Required("image_source", default="api"): vol.In(["api", "manual"]),
-        vol.Optional("server_url", default="https://api.celeste.crubio.fyi"): str,
-        vol.Optional("lat"): str,
-        vol.Optional("lon"): str,
-        vol.Optional("image_url"): str,
+        vol.Required("server_url", default="https://api.celeste.crubio.fyi"): str,
+        vol.Required("lat"): str,
+        vol.Required("lon"): str,
     }
 )
 
@@ -44,17 +42,12 @@ def _validate_step1(data: dict[str, Any]) -> dict[str, str]:
 
 def _validate_step2(data: dict[str, Any]) -> dict[str, str]:
     errors: dict[str, str] = {}
-    source = data.get("image_source", "api")
-    if source == "api":
-        if not data.get("lat", "").strip():
-            errors["lat"] = "required"
-        if not data.get("lon", "").strip():
-            errors["lon"] = "required"
-        if not data.get("server_url", "").strip():
-            errors["server_url"] = "required"
-    elif source == "manual":
-        if not data.get("image_url", "").strip():
-            errors["image_url"] = "required"
+    if not data.get("lat", "").strip():
+        errors["lat"] = "required"
+    if not data.get("lon", "").strip():
+        errors["lon"] = "required"
+    if not data.get("server_url", "").strip():
+        errors["server_url"] = "required"
     return errors
 
 
@@ -71,7 +64,7 @@ class MomentumConfigFlow(ConfigFlow, domain=DOMAIN):
             errors = _validate_step1(user_input)
             if not errors:
                 self._step1_data = user_input
-                return await self.async_step_image_source()
+                return await self.async_step_location()
 
         return self.async_show_form(
             step_id="user",
@@ -79,7 +72,7 @@ class MomentumConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_image_source(
+    async def async_step_location(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         errors: dict[str, str] = {}
@@ -90,32 +83,31 @@ class MomentumConfigFlow(ConfigFlow, domain=DOMAIN):
                 return await self._create_entry(user_input)
 
         return self.async_show_form(
-            step_id="image_source",
-            data_schema=STEP2_API_SCHEMA,
+            step_id="location",
+            data_schema=STEP2_SCHEMA,
             errors=errors,
         )
 
-    async def _create_entry(self, image_data: dict[str, Any]) -> ConfigFlowResult:
-        data = {**self._step1_data, **image_data}
+    async def _create_entry(self, location_data: dict[str, Any]) -> ConfigFlowResult:
+        data = {**self._step1_data, **location_data}
 
-        if image_data.get("image_source") == "api":
-            try:
-                local_url = await fetch_and_save_image(
-                    hass=self.hass,
-                    entry_id=self.flow_id,
-                    server_url=image_data["server_url"],
-                    lat=image_data["lat"],
-                    lon=image_data["lon"],
-                    date=self._step1_data["date"],
-                    time=self._step1_data["time"],
-                )
-                data["image_local_url"] = local_url
-            except ImageFetchError as err:
-                return self.async_show_form(
-                    step_id="image_source",
-                    data_schema=STEP2_API_SCHEMA,
-                    errors={"base": str(err)},
-                )
+        try:
+            local_url = await fetch_and_save_image(
+                hass=self.hass,
+                entry_id=self.flow_id,
+                server_url=location_data["server_url"],
+                lat=location_data["lat"],
+                lon=location_data["lon"],
+                date=self._step1_data["date"],
+                time=self._step1_data["time"],
+            )
+            data["image_local_url"] = local_url
+        except ImageFetchError as err:
+            return self.async_show_form(
+                step_id="location",
+                data_schema=STEP2_SCHEMA,
+                errors={"base": str(err)},
+            )
 
         return self.async_create_entry(
             title=self._step1_data["name"],

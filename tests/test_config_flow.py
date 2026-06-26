@@ -30,10 +30,9 @@ def test_step1_invalid_time():
 # --- Step 2 validation ---
 
 
-def test_step2_api_valid():
+def test_step2_valid():
     errors = _validate_step2(
         {
-            "image_source": "api",
             "server_url": "https://api.celeste.app",
             "lat": "40.7128",
             "lon": "-74.0060",
@@ -42,10 +41,9 @@ def test_step2_api_valid():
     assert errors == {}
 
 
-def test_step2_api_missing_lat():
+def test_step2_missing_lat():
     errors = _validate_step2(
         {
-            "image_source": "api",
             "server_url": "https://api.celeste.app",
             "lat": "",
             "lon": "-74.0060",
@@ -54,10 +52,9 @@ def test_step2_api_missing_lat():
     assert "lat" in errors
 
 
-def test_step2_api_missing_lon():
+def test_step2_missing_lon():
     errors = _validate_step2(
         {
-            "image_source": "api",
             "server_url": "https://api.celeste.app",
             "lat": "40.7128",
             "lon": "",
@@ -66,21 +63,12 @@ def test_step2_api_missing_lon():
     assert "lon" in errors
 
 
-def test_step2_manual_valid():
+def test_step2_missing_server_url():
     errors = _validate_step2(
         {
-            "image_source": "manual",
-            "image_url": "https://example.com/sky.svg",
+            "server_url": "",
+            "lat": "40.7128",
+            "lon": "-74.0060",
         }
     )
-    assert errors == {}
-
-
-def test_step2_manual_missing_url():
-    errors = _validate_step2(
-        {
-            "image_source": "manual",
-            "image_url": "",
-        }
-    )
-    assert "image_url" in errors
+    assert "server_url" in errors
