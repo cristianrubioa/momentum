@@ -18,6 +18,9 @@ media/
 *.log
 db.sqlite3
 
+# Node
+node_modules/
+
 # Poetry
 .venv/
 
