@@ -92,7 +92,7 @@ export class MomentumCard extends LitElement {
     return { entity: "sensor.momentum_example" };
   }
 
-  updated(changedProps: Map<string, unknown>) {
+  updated(_changedProps: Map<string, unknown>) {
     const url = this._imageUrl;
     if (url && url !== this._svgUrl) {
       this._svgUrl = url;
