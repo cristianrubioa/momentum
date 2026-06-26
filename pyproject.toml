@@ -3,7 +3,7 @@ name = "momentum"
 version = "0.1.0"
 description = "HACS integration for Home Assistant"
 authors = ["Cristian Rubio <cristianrubioa@gmail.com>"]
-packages = []
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
