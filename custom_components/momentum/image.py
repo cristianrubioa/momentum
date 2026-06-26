@@ -24,7 +24,7 @@ async def fetch_and_save_image(
     url = f"{server_url.rstrip('/')}/api/sky.svg?lat={lat}&lon={lon}&dt={dt}"
 
     www_dir = Path(hass.config.path("www")) / "momentum"
-    www_dir.mkdir(parents=True, exist_ok=True)
+    await hass.async_add_executor_job(lambda: www_dir.mkdir(parents=True, exist_ok=True))
     dest = www_dir / f"{entry_id}.svg"
 
     timeout = aiohttp.ClientTimeout(total=20)
@@ -41,7 +41,7 @@ async def fetch_and_save_image(
     except aiohttp.ClientConnectorError as err:
         raise ImageFetchError("cannot_connect") from err
 
-    dest.write_bytes(content)
+    await hass.async_add_executor_job(dest.write_bytes, content)
     return f"/local/momentum/{entry_id}.svg"
 
 
@@ -49,8 +49,12 @@ def local_image_path(hass: HomeAssistant, entry_id: str) -> Path:
     return Path(hass.config.path("www")) / "momentum" / f"{entry_id}.svg"
 
 
-def delete_image(hass: HomeAssistant, entry_id: str) -> None:
+async def delete_image(hass: HomeAssistant, entry_id: str) -> None:
     """Remove the locally stored SVG file if it exists."""
     path = local_image_path(hass, entry_id)
+    await hass.async_add_executor_job(_unlink_if_exists, path)
+
+
+def _unlink_if_exists(path: Path) -> None:
     if path.exists():
         path.unlink()

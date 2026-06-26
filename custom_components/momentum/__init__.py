@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
@@ -18,7 +19,9 @@ async def async_setup(hass: HomeAssistant, _config: dict) -> bool:
     if not _REGISTERED:
         bundle = Path(__file__).parent / "momentum-card.js"
         if bundle.exists():
-            hass.http.register_static_path(_CARD_URL, str(bundle), cache_headers=False)
+            await hass.http.async_register_static_paths(
+                [StaticPathConfig(_CARD_URL, str(bundle), cache_headers=False)]
+            )
             _REGISTERED = True
     return True
 
@@ -34,4 +37,4 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    delete_image(hass, entry.entry_id)
+    await delete_image(hass, entry.entry_id)

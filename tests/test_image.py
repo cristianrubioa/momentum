@@ -14,6 +14,11 @@ from custom_components.momentum.image import ImageFetchError, delete_image, fetc
 def _make_hass(tmp_path: Path) -> MagicMock:
     hass = MagicMock()
     hass.config.path = lambda *parts: str(tmp_path.joinpath(*parts))
+
+    async def _executor(func, *args):
+        return func(*args)
+
+    hass.async_add_executor_job = _executor
     return hass
 
 
@@ -102,19 +107,20 @@ async def test_timeout_raises_error(tmp_path: Path):
             )
 
 
-def test_delete_removes_file(tmp_path: Path):
+@pytest.mark.asyncio
+async def test_delete_removes_file(tmp_path: Path):
     hass = _make_hass(tmp_path)
     svg_dir = tmp_path / "www" / "momentum"
     svg_dir.mkdir(parents=True)
     svg_file = svg_dir / "abc123.svg"
     svg_file.write_bytes(b"<svg></svg>")
 
-    delete_image(hass, "abc123")
+    await delete_image(hass, "abc123")
 
     assert not svg_file.exists()
 
 
-def test_delete_noop_if_missing(tmp_path: Path):
+@pytest.mark.asyncio
+async def test_delete_noop_if_missing(tmp_path: Path):
     hass = _make_hass(tmp_path)
-    # Should not raise even if file doesn't exist
-    delete_image(hass, "nonexistent")
+    await delete_image(hass, "nonexistent")

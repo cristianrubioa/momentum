@@ -6,8 +6,10 @@ import sys
 import types
 
 
-def _make_module(name: str, **attrs) -> types.ModuleType:
+def _make_module(name: str, package: bool = False, **attrs) -> types.ModuleType:
     mod = types.ModuleType(name)
+    if package:
+        mod.__path__ = []  # marks it as a package so sub-imports resolve
     mod.__dict__.update(attrs)
     return mod
 
@@ -59,7 +61,17 @@ class SensorEntity:
 
 
 ha_sensor = _make_module("homeassistant.components.sensor", SensorEntity=SensorEntity)
-ha_components = _make_module("homeassistant.components")
+
+
+class StaticPathConfig:
+    def __init__(self, url_path: str, path: str, cache_headers: bool = True):
+        self.url_path = url_path
+        self.path = path
+        self.cache_headers = cache_headers
+
+
+ha_http = _make_module("homeassistant.components.http", StaticPathConfig=StaticPathConfig)
+ha_components = _make_module("homeassistant.components", package=True)
 
 
 # --- homeassistant.helpers ---
@@ -85,14 +97,15 @@ ha_helpers_event = _make_module(
     async_track_time_change=async_track_time_change,
 )
 
-ha_helpers = _make_module("homeassistant.helpers")
+ha_helpers = _make_module("homeassistant.helpers", package=True)
 
 # --- register all stubs ---
 stubs = {
-    "homeassistant": _make_module("homeassistant"),
+    "homeassistant": _make_module("homeassistant", package=True),
     "homeassistant.core": ha_core,
     "homeassistant.config_entries": ha_config_entries,
     "homeassistant.components": ha_components,
+    "homeassistant.components.http": ha_http,
     "homeassistant.components.sensor": ha_sensor,
     "homeassistant.helpers": ha_helpers,
     "homeassistant.helpers.entity_platform": ha_helpers_entity_platform,
