@@ -1,0 +1,6 @@
+{
+  "name": "Momentum",
+  "documentation": "https://github.com/cristianrubioa/momentum",
+  "homeassistant": "2023.1.0",
+  "iot_class": "calculated"
+}
