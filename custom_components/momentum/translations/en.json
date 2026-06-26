@@ -1,0 +1,40 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Moment details",
+        "description": "Define the moment you want to preserve.",
+        "data": {
+          "name": "Name or message",
+          "date": "Date (YYYY-MM-DD)",
+          "time": "Time in UTC (HH:MM)"
+        },
+        "data_description": {
+          "time": "Enter the time in UTC. For example, if the moment happened at 10:30 PM EST, enter 03:30."
+        }
+      },
+      "image_source": {
+        "title": "Sky map image",
+        "description": "Choose how to source the sky map for this moment.",
+        "data": {
+          "image_source": "Image source",
+          "server_url": "Celeste API URL",
+          "lat": "Latitude",
+          "lon": "Longitude",
+          "image_url": "Image URL (manual)"
+        }
+      }
+    },
+    "error": {
+      "required": "This field is required.",
+      "invalid_date": "Enter a valid date in YYYY-MM-DD format.",
+      "invalid_time": "Enter a valid time in HH:MM format.",
+      "cannot_connect": "Cannot connect to the Celeste API. Check the server URL and try again.",
+      "api_error": "The API returned an error. Check coordinates and date.",
+      "timeout": "Request timed out. The server did not respond within 10 seconds."
+    },
+    "abort": {
+      "already_configured": "This memento is already configured."
+    }
+  }
+}

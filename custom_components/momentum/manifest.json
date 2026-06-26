@@ -1,0 +1,12 @@
+{
+  "domain": "momentum",
+  "name": "Momentum",
+  "version": "1.0.0",
+  "documentation": "https://github.com/cristianrubioa/momentum",
+  "issue_tracker": "https://github.com/cristianrubioa/momentum/issues",
+  "requirements": ["python-dateutil>=2.8.2"],
+  "dependencies": [],
+  "codeowners": ["@cristianrubioa"],
+  "config_flow": true,
+  "iot_class": "calculated"
+}
