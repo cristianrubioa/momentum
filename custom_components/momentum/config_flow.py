@@ -22,7 +22,10 @@ STEP1_SCHEMA = vol.Schema(
 
 STEP2_SCHEMA = vol.Schema(
     {
-        vol.Required("server_url", default="https://api.celeste.crubio.fyi"): str,
+        vol.Required("server_url", default="https://celeste.crubio.fyi"): str,
+        vol.Required(
+            "api_key", default="135bfbafa7bf29accd5372d28e0d5e24e3bdfad3b946f9deb1f4cdcad94311d1"
+        ): str,
         vol.Required("lat"): str,
         vol.Required("lon"): str,
     }
@@ -96,6 +99,7 @@ class MomentumConfigFlow(ConfigFlow, domain=DOMAIN):
                 hass=self.hass,
                 entry_id=self.flow_id,
                 server_url=location_data["server_url"],
+                api_key=location_data["api_key"],
                 lat=location_data["lat"],
                 lon=location_data["lon"],
                 date=self._step1_data["date"],

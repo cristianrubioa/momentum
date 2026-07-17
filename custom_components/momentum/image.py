@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 import aiohttp
 from homeassistant.core import HomeAssistant
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class ImageFetchError(Exception):
@@ -14,6 +17,7 @@ async def fetch_and_save_image(
     hass: HomeAssistant,
     entry_id: str,
     server_url: str,
+    api_key: str,
     lat: str,
     lon: str,
     date: str,
@@ -22,6 +26,7 @@ async def fetch_and_save_image(
     """Fetch SVG from the Celeste API and save it locally. Returns the local path."""
     dt = f"{date}T{time}:00Z"
     url = f"{server_url.rstrip('/')}/api/sky.svg?lat={lat}&lon={lon}&dt={dt}"
+    headers = {"X-API-Key": api_key} if api_key else {}
 
     www_dir = Path(hass.config.path("www")) / "momentum"
     await hass.async_add_executor_job(lambda: www_dir.mkdir(parents=True, exist_ok=True))
@@ -30,8 +35,9 @@ async def fetch_and_save_image(
     timeout = aiohttp.ClientTimeout(total=20)
     try:
         async with aiohttp.ClientSession(timeout=timeout) as session:
-            async with session.get(url) as resp:
+            async with session.get(url, headers=headers) as resp:
                 if resp.status != 200:
+                    _LOGGER.warning("Celeste API returned %s for %s", resp.status, url)
                     raise ImageFetchError("api_error")
                 content = await resp.read()
     except aiohttp.ServerTimeoutError as err:
